@@ -205,6 +205,21 @@ impl DeltaObjectStore {
             Ok(false)
         }
     }
+
+    /// Check if the change data feed feature is enabled
+    pub async fn is_change_data_enabled(&self) -> ObjectStoreResult<bool> {
+        // TODO We should really be using HEAD here, but this fails in windows tests
+        let mut stream = self.list(Some(self.change_data_path())).await?;
+        if let Some(res) = stream.next().await {
+            match res {
+                Ok(_) => Ok(true),
+                Err(ObjectStoreError::NotFound { .. }) => Ok(false),
+                Err(err) => Err(err),
+            }
+        } else {
+            Ok(false)
+        }
+    }
 }
 
 #[async_trait::async_trait]
