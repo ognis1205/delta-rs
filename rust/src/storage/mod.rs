@@ -38,6 +38,10 @@ lazy_static! {
     static ref DELTA_LOG_PATH: Path = Path::from("_delta_log");
 }
 
+lazy_static! {
+    static ref CHANGE_DATA_PATH: Path = Path::from("_change_data");
+}
+
 /// Return the uri of commit version.
 pub(crate) fn commit_uri_from_version(version: i64) -> Path {
     let version = format!("{version:020}.json");
@@ -138,6 +142,11 @@ impl DeltaObjectStore {
     /// [Path] to Delta log
     pub fn log_path(&self) -> &Path {
         &DELTA_LOG_PATH
+    }
+
+    /// [Path] to Change data files
+    pub fn change_data_path(&self) -> &Path {
+        &CHANGE_DATA_PATH
     }
 
     /// [Path] to Delta log
